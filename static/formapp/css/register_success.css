@@ -1,0 +1,91 @@
+.container {
+  padding: 5px;
+}
+
+.student-details {
+  margin-bottom: 20px;
+}
+
+.id-photos {
+  margin-bottom: 20px;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive grid */
+  gap: 10px; /* Spacing between images */
+}
+
+.image-item {
+  position: relative;
+  display: inline-block;
+}
+
+.image-item img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+/* Watermark overlay */
+.image-item::after {
+  content: "ADC USE ONLY"; /* Change text if needed */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 16px 24px;
+  border-radius: 10px;
+  pointer-events: none; /* Prevent user interaction */
+  opacity: 0.8;
+  white-space: nowrap;
+}
+/* Watermark for larger screens */
+@media (min-width: 768px) {
+  .image-item::after {
+    font-size: 16px;
+    padding: 8px 12px;
+  }
+}
+
+/* Optional: Centered watermark */
+.image-item.watermark::after {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.7;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .image-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+}
+
+/* Style for smaller screens */
+@media (max-width: 500px) {
+  .image-grid {
+    grid-template-columns: 1fr; /* Single column */
+  }
+}
+
+.success-message {
+  margin-top: 20px;
+  color: green; /* Set the text color to green */
+  text-align: center; /* Center the text */
+  font-size: 1.2rem; /* Set the font size */
+}
+
+.success-message i {
+  /* Style the icon */
+  margin-right: 10px; /* Add spacing between the icon and text */
+  font-size: 32px; /* Adjust icon size as needed */
+  text-align: center; /* Center the text */
+  color: green;
+}

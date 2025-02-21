@@ -1,0 +1,25 @@
+{
+  "short_name": "ADC Form",
+  "name": "ADC Student Registration Form",
+  "start_url": "/register_student/",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#007bff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/static/formapp/images/icon-48x48.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "/static/formapp/images/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "categories": ["education", "registration", "productivity"],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

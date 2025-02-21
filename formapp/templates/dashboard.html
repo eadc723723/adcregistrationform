@@ -1,0 +1,45 @@
+{% extends "base.html" %}{% load static %} {% block title %}Dashboard{% endblock %} {% block content %}
+<link rel="stylesheet" href="{% static 'formapp/css/dashboard.css' %}" />
+<div class="container mt-4">
+  <h2 class="mb-3">Registered Students</h2>
+  <div class="row mb-3">
+    <div class="col-md-3">
+      <input type="text" id="idNoFilter" class="form-control" placeholder="Filter by IC Number" />
+    </div>
+    <div class="col-md-3">
+      <input type="text" id="nameFilter" class="form-control" placeholder="Filter by Name" />
+    </div>
+    <div class="col-md-3">
+      <input type="text" id="agentCodeFilter" class="form-control" placeholder="Filter by Agent Code" />
+    </div>
+    <hr />
+    <div class="col-md-6 date-filter-container">
+      <input type="date" id="dateFromFilter" class="form-control" placeholder="From Date" />
+      <span class="to-text">to</span>
+      <input type="date" id="dateToFilter" class="form-control" placeholder="To Date" />
+    </div>
+    <div class="col-md-6 mt-2 button-container">
+      <button id="searchButton" class="button btn is-primary">Search</button>
+      <button id="clearButton" class="button btn is-link">Clear</button>
+    </div>
+  </div>
+  <table class="table table-striped" id="studentsTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>ID Number</th>
+        <th>Class Type</th>
+        <th>Registration Form</th>
+        <th>Agent</th>
+        <th>Registration Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Student rows will be populated here by JavaScript -->
+    </tbody>
+  </table>
+</div>
+<script src="{% static 'formapp/js/dashboard.js' %}"></script>
+{% endblock %}

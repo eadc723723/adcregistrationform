@@ -1,0 +1,23 @@
+hr {
+  display: block;
+  opacity: 0;
+}
+
+.date-filter-container {
+  display: flex;
+  align-items: center;
+}
+
+.date-filter-container .to-text {
+  margin: 0 10px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.button-container button {
+  margin-left: 10px;
+}

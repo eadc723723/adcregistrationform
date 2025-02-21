@@ -1,0 +1,304 @@
+{% extends "base.html" %} {% load static %} {% load crispy_forms_tags %}{% block title %}Register Student{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+<link rel="stylesheet" href="{% static 'formapp/css/register_student.css' %}" />
+<!-- Slick CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick-theme.css" />
+
+<!-- jQuery (Required for Slick) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Slick JS -->
+<script src="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.min.js"></script>
+
+{% endblock %} {% block content %}
+
+<img src="{% static 'formapp/images/icon-192x192.png' %}" alt="adclogo" class="adc-logo" />
+<h2 class="title is-3">Registration Form</h2>
+<div class="progress-bar-container">
+  <div class="progress-steps">
+    <div class="progress-line">
+      <div class="progress-fill"></div>
+    </div>
+    <div class="step-number-container"><div class="step-number active" data-step="1">1</div></div>
+    <div class="step-number-container"><div class="step-number" data-step="2">2</div></div>
+    <div class="step-number-container"><div class="step-number" data-step="3">3</div></div>
+  </div>
+</div>
+
+<form id="registerStudentForm" method="post" action="{% url 'register_student' %}" enctype="multipart/form-data" class="container">
+  {% csrf_token %}
+  <!-- Checkbox to toggle additional image uploaders -->
+  <div class="field toggle-slider-container">
+    <label class="toggle-slider">
+      <input type="checkbox" id="toggleAdditionalImages" />
+      <span class="slider"></span>
+    </label>
+    <span>Calon Tambah Kelas/ vokasional</span>
+  </div>
+  <div class="uploadImageContainer">
+    <div class="uploadItem">
+      <div class="uploadIcon" data-input-id="image1Uploader">&#x1F4F7;</div>
+      <div class="uploadLabel">IC Front</div>
+      <input type="file" id="image1Uploader" name="image1" data-preview-id="imagePreview1" class="uploadImageForm" />
+    </div>
+
+    <div class="uploadItem">
+      <div class="uploadIcon" data-input-id="image2Uploader">&#x1F4F7;</div>
+      <div class="uploadLabel">IC Back</div>
+      <input type="file" id="image2Uploader" name="image2" data-preview-id="imagePreview2" class="uploadImageForm" />
+    </div>
+
+    <div class="uploadItem additional" style="display: none">
+      <div class="uploadIcon" data-input-id="image3Uploader">&#x1F4F7;</div>
+      <div class="uploadLabel">License Front</div>
+      <input type="file" id="image3Uploader" name="image3" data-preview-id="imagePreview3" class="uploadImageForm additional" />
+    </div>
+
+    <div class="uploadItem additional" style="display: none">
+      <div class="uploadIcon" data-input-id="image4Uploader">&#x1F4F7;</div>
+      <div class="uploadLabel">License Back</div>
+      <input type="file" id="image4Uploader" name="image4" data-preview-id="imagePreview4" class="uploadImageForm additional" />
+    </div>
+  </div>
+
+  <div class="carousel-container">
+    <div class="image-carousel">
+      <!-- Uploaded images will be appended here -->
+    </div>
+  </div>
+
+  <!-- Hidden input for agent code -->
+  <input type="hidden" id="agent_code" name="agent_code" value="{{ agent_code }}" />
+  <div id="step1" class="step">
+    <!-- Step 1 form fields -->
+    <div class="field">
+      <label class="label">Agent Code*</label>
+      <div class="control">{{ step1_form.display_agent|as_crispy_field }}</div>
+    </div>
+    <div class="field">
+      <label class="label">Select Class*</label>
+      <div class="control">{{ step1_form.class_id|as_crispy_field }}</div>
+    </div>
+    <div class="field">
+      <label class="label">Select Registration Form*</label>
+      <div class="control box" id="registration-form-container">{{ step1_form.registration_form|as_crispy_field }}</div>
+    </div>
+    <div class="field">
+      <label class="checkbox"> {{ step1_form.terms_acknowledgment|as_crispy_field }} </label>
+    </div>
+    <button type="button" class="nextStep button is-primary">Next</button>
+  </div>
+  <div id="step2" class="step">
+    <!-- Step 2 form fields -->
+    <div class="field">
+      <label class="label">Name*</label>
+      <div class="control">{{ step2_form.name|as_crispy_field }}</div>
+    </div>
+    <div class="field">
+      <label class="label">IC Number*</label>
+      <div class="control">{{ step2_form.id_no|as_crispy_field }}</div>
+    </div>
+    <div class="field">
+      <label class="label">Address*</label>
+      <div class="control">{{ step2_form.address|as_crispy_field }}</div>
+    </div>
+    <div class="field">
+      <label class="label">Gender*</label>
+      <div class="control">{{ step2_form.gender|as_crispy_field }}</div>
+    </div>
+    <button type="button" class="prevStep button is-info">Previous</button>
+    <button type="button" class="nextStep button is-primary">Next</button>
+  </div>
+  <div id="step3" class="step">
+    <!-- Step 3 form fields -->
+    <div class="field">
+      <label class="label">Phone Number*<span class="example-text">( eg. 01xxxxxxxxx)</span></label>
+      <div class="control">{{ step3_form.phone_numbers|as_crispy_field }}</div>
+    </div>
+    <div class="field">
+      <label class="label">Email*</label>
+      <div class="control">{{ step3_form.email|as_crispy_field }}</div>
+    </div>
+    <div class="field">
+      <label class="label">Contact No Emergency*<span class="example-text">( eg. 01xxxxxxxxx)</span></label>
+      <div class="control">{{ step3_form.contact_no_emergency|as_crispy_field }}</div>
+    </div>
+    <div class="field">
+      <label class="label">Emergency Contact Relationship</label>
+      <div class="control">{{ step3_form.emergency_contact_relationship|as_crispy_field }}</div>
+    </div>
+    <button type="button" class="prevStep button is-info">Previous</button>
+    <button type="submit" class="button is-primary">Register</button>
+  </div>
+</form>
+<div class="container">
+  <!-- Terms Modal -->
+  <div id="termsModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Terms and Conditions</p>
+        <button class="delete" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body" id="termsModalContent">
+        <!-- Terms content will be loaded here -->
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button">Close</button>
+      </footer>
+    </div>
+  </div>
+</div>
+<!-- Confirmation Modal -->
+<div id="confirmationModal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Confirm Submission</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <p>Are you sure you want to submit the registration form?</p>
+    </section>
+    <footer class="modal-card-foot">
+      <button id="confirmSubmit" class="button is-primary">Yes</button>
+      <button class="button" id="cancelSubmit">No</button>
+    </footer>
+  </div>
+</div>
+
+<!-- PWA Install Prompt -->
+<div id="pwaOverlay" class="pwa-overlay" style="display: none"></div>
+
+<div id="pwaInstallPrompt" class="pwa-prompt" style="display: none">
+  <div class="pwa-prompt-content">
+    <p>Install this app on your device for easy access?</p>
+    <div class="pwa-prompt-buttons">
+      <button id="pwaInstallButton" class="pwa-button pwa-button-primary">Install</button>
+      <button id="pwaDismissButton" class="pwa-button pwa-button-light">Dismiss</button>
+    </div>
+  </div>
+</div>
+
+<!-- Service Worker Registration -->
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker
+        .register('{% static "formapp/js/service-worker.js" %}')
+        .then((registration) => {
+          console.log("ServiceWorker registration successful with scope: ", registration.scope);
+        })
+        .catch((err) => {
+          console.log("ServiceWorker registration failed: ", err);
+        });
+    });
+  }
+</script>
+
+<!-- Include the JavaScript file -->
+<script src="{% static 'formapp/js/register_student.js' %}" data-notification-message="{{ notification_message }}"></script>
+
+<script>
+  let deferredPrompt;
+  const pwaPrompt = document.getElementById("pwaInstallPrompt");
+  const pwaOverlay = document.getElementById("pwaOverlay");
+  const pwaInstallBtn = document.getElementById("pwaInstallButton");
+  const pwaDismissBtn = document.getElementById("pwaDismissButton");
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    // Prevent the mini-infobar from appearing on mobile
+    e.preventDefault();
+    // Stash the event so it can be triggered later
+    deferredPrompt = e;
+    // Show our custom prompt
+    setTimeout(() => {
+      pwaOverlay.style.display = "block";
+      pwaPrompt.style.display = "block";
+    }, 1000); // Show after 1 second delay
+  });
+
+  pwaInstallBtn.addEventListener("click", async () => {
+    // Hide the overlay and prompt
+    pwaOverlay.style.display = "none";
+    pwaPrompt.style.display = "none";
+    // Show the install prompt
+    deferredPrompt.prompt();
+    // Wait for the user to respond to the prompt
+    const { outcome } = await deferredPrompt.userChoice;
+    // Optionally, send analytics event with outcome of user choice
+    console.log(`User response to the install prompt: ${outcome}`);
+    // We've used the prompt, and can't use it again, throw it away
+    deferredPrompt = null;
+  });
+
+  pwaDismissBtn.addEventListener("click", () => {
+    // Hide the overlay and prompt
+    pwaOverlay.style.display = "none";
+    pwaPrompt.style.display = "none";
+    // Optionally, store dismissal in localStorage to not show again
+    localStorage.setItem("pwaPromptDismissed", "true");
+  });
+</script>
+
+<style>
+  .pwa-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+  .pwa-prompt {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  .pwa-prompt-content {
+    text-align: center;
+  }
+  .pwa-prompt-buttons {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .pwa-button {
+    padding: 0.5em 1em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .pwa-button-primary {
+    background-color: #00d1b2;
+    color: white;
+    border: none;
+  }
+
+  .pwa-button-primary:hover {
+    background-color: #00b89c;
+  }
+
+  .pwa-button-light {
+    background-color: #f5f5f5;
+    color: #363636;
+    border: 1px solid #dbdbdb;
+  }
+
+  .pwa-button-light:hover {
+    background-color: #e8e8e8;
+  }
+</style>
+
+{% endblock %}

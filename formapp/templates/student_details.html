@@ -1,0 +1,140 @@
+{% extends "base.html" %} {% load static %} {% block title %}Student Details{% endblock %} {% block content %}
+<link rel="stylesheet" href="{% static 'formapp/css/student_details.css' %}" />
+
+<div class="details-container">
+  <img src="{% static 'formapp/images/icon-192x192.png' %}" alt="adclogo" class="adc-logo">
+
+  <!-- Student Information Table -->
+  <div class="student-info">
+    <h2>Student Registration Form</h2>
+    <table class="student-table">
+      <tbody>
+        <tr>
+          <td><strong>Registration Form:</strong></td>
+          <td><strong>{{ student.registration_form.name }}<strong></td>
+        </tr>
+        <tr>
+          <td><strong>Class:</strong></td>
+          <td>{% for class in student.class_id.all %} {{ class.class_type }}{% if not forloop.last %}, {% endif %} {% empty %} No classes assigned. {% endfor %}</td>
+        </tr>
+        <tr>
+          <td><strong>IC NO:</strong></td>
+          <td>
+            {{ student.id_no }}
+            <button class="copy-btn" onclick="copyToClipboard('{{ student.id_no }}')">Copy</button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Name:</strong></td>
+          <td>
+            {{ student.name }}
+            <button class="copy-btn" onclick="copyToClipboard('{{ student.name }}')">Copy</button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Gender:</strong></td>
+          <td>
+            {{ student.gender }}
+            <button class="copy-btn" onclick="copyToClipboard('{{ student.gender }}')">Copy</button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Phone:</strong></td>
+          <td>
+            {{ student.phone_numbers }}
+            <button class="copy-btn" onclick="copyToClipboard('{{ student.phone_numbers }}')">Copy</button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Agent:</strong></td>
+          <td>{{ student.agent.agent_code }} - {{ student.agent.agent_name }}</td>
+        </tr>
+        <tr>
+          <td><strong>Address:</strong></td>
+          <td>
+            {{ student.address }}
+            <button class="copy-btn" onclick="copyToClipboard('{{ student.address }}')">Copy</button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Email:</strong></td>
+          <td>
+            {{ student.email }}
+            <button class="copy-btn" onclick="copyToClipboard('{{ student.email }}')">Copy</button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Emergency Contact:</strong></td>
+          <td>{{ student.contact_no_emergency }}</td>
+        </tr>
+        <tr>
+          <td><strong>Emergency Contact Relationship:</strong></td>
+          <td>{{ student.emergency_contact_relationship }}</td>
+        </tr>
+        <tr>
+          <td><strong>Registration Date:</strong></td>
+          <td>{{ student.registration_date|date:"d/m/Y" }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <span class="section"></span>
+</div>
+
+<!-- Separate Image Section (Outside Container) -->
+<div class="student-photos">
+  <h3>Student Attachment:</h3>
+  <div class="image-grid">
+    {% for photo in student.id_photo_set.all %}
+    <div class="image-item">
+      <img src="{{ photo.image.url }}" alt="Student ID Photo" />
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Buttons -->
+<div class="button-container">
+  <button onclick="window.history.back()" class="back-button button">Back</button>
+  <button onclick="window.print()" class="print-button button is-primary">Print</button>
+  <button onclick="printICOnly()" class="print-ic-button button is-success">Print IC Only</button>
+</div>
+
+<script>
+  function printICOnly() {
+    document.body.classList.add("print-ic-only");
+
+    setTimeout(() => {
+      window.print();
+      document.body.classList.remove("print-ic-only");
+    }, 100);
+  }
+  function copyToClipboard(value) {
+    navigator.clipboard
+      .writeText(value)
+      .then(() => {
+        showToast("Copied: " + value);
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+      });
+  }
+
+  function showToast(message) {
+    let toast = document.createElement("div");
+    toast.className = "toast-message";
+    toast.innerText = message;
+    document.body.appendChild(toast);
+
+    // Fade out after 2 seconds
+    setTimeout(() => {
+      toast.style.opacity = "0";
+      setTimeout(() => {
+        toast.remove();
+      }, 500); // Wait for fade-out transition
+    }, 2000);
+  }
+</script>
+
+{% endblock %}

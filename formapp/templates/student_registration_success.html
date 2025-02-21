@@ -1,0 +1,47 @@
+{% extends "base.html" %}{% load static %} {% block title %}Registration Success{% endblock %} {% block content %}
+<link rel="stylesheet" href="{% static 'formapp/css/register_success.css' %}" />
+<div class="container section">
+  <h2 class="success-message"><i class="fas fa-check-circle"></i></h2>
+  <h2 class="success-message">Registration Successful!</h2>
+
+  <div class="student-details box">
+    <h2>Student Details</h2>
+    <p><strong>Registration Form:</strong> {{ student.registration_form.name }}</p>
+    <p><strong>Agent:</strong> {{ student.agent.agent_code }}</p>
+    <p><strong>Class:</strong> {% for class in student.class_id.all %}{{ class.class_type }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+
+    <p><strong>Name:</strong> {{ student.name }}</p>
+    <p><strong>NO IC:</strong> {{ student.id_no }}</p>
+    <p><strong>Email:</strong> {{ student.email }}</p>
+    <p><strong>Phone:</strong> {{ student.phone_numbers }}</p>
+    <p><strong>Address:</strong> {{ student.address }}</p>
+    <p><strong>Registration Date:</strong> {{ student.registration_date|date:"d/m/Y" }}</p>
+  </div>
+
+  <div class="id-photos">
+    <h3>Attachment :</h3>
+    <div class="image-grid">
+      {% for photo in student.id_photo_set.all %}
+      <div class="image-item">
+        <img src="{{ photo.image.url }}" alt="Student ID Photo" />
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <button id="register-another-button" class="button is-danger is-fullwidth">Register Another Student</button>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("register-another-button").addEventListener("click", () => {
+      const agentCode = "{{ agent_code }}";
+      if (agentCode) {
+        window.location.href = `/register_student/${agentCode}/`;
+      } else {
+        window.location.href = "/register_student/";
+      }
+    });
+  });
+</script>
+{% endblock %}

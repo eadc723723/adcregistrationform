@@ -1,0 +1,263 @@
+.adc-logo {
+  display: block; /* Ensures the image behaves as a block element */
+  margin: 20px auto; /* Centers the image horizontally */
+  max-width: 100px; /* Adjust width */
+  height: auto; /* Maintain aspect ratio */
+}
+h2 {
+  text-align: center;
+  color: #333;
+}
+.container {
+  margin-bottom: 20px; /* Adjust the value as needed */
+}
+
+.step {
+  display: none;
+}
+.form-label {
+  display: none;
+}
+
+/* 3D Toggle Slider */
+.toggle-slider-container {
+  display: flex;
+  align-items: center;
+}
+
+.toggle-slider {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  margin-right: 10px; /* Add some space between the slider and the text */
+}
+
+.toggle-slider input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.uploadIcon {
+  font-size: 30px; /* Adjust size as needed */
+  cursor: pointer; /* Make it clickable */
+  transition: transform 0.2s ease; /* Add a transition for transform */
+}
+
+.uploadIcon:hover {
+  transform: scale(1.1); /* Increase the size slightly on hover */
+}
+
+.uploadIcon.active {
+  transform: scale(0.8); /* Slightly shrink on click */
+}
+
+input:checked + .slider {
+  background-color: #00d1b2;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* Reduce font size for terms acknowledgment */
+#id_terms_acknowledgment + label {
+  font-size: 0.8em;
+}
+
+/* Set width and height for form-check-input and display horizontally */
+.form-check-input {
+  width: 20px;
+  height: 20px;
+}
+
+/* Add spacing between checkboxes */
+.form-check {
+  margin-bottom: 10px;
+}
+.form-check-label {
+  margin-left: 10px;
+}
+
+.class-checkbox-lesen .form-check {
+  margin-right: 10px;
+}
+.class-type-checkbox {
+  display: flex;
+  margin-top: 15px;
+  gap: 10px;
+  align-items: center;
+}
+
+.class-type-checkbox label {
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+}
+
+/* Terms modal styling */
+#termsModalContent p {
+  font-size: 0.9em;
+  margin-bottom: 10px;
+  list-style-type: disc;
+  margin-left: 20px;
+  z-index: 1001;
+}
+
+/* Underline "View Terms" link */
+.view-terms {
+  text-decoration: underline;
+}
+
+.rotate-image {
+  cursor: pointer;
+  font-size: 24px;
+  margin-top: 10px;
+  text-align: center;
+  color: #007bff;
+}
+
+.rotate-image:hover {
+  color: #0056b3;
+}
+
+/* Progress Bar Styles */
+.progress-bar-container {
+  margin: 20px auto;
+  max-width: 300px;
+  text-align: center;
+}
+
+.progress-steps {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Align items vertically */
+  position: relative;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.step-number {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.step-number-container {
+  position: relative;
+  z-index: 1; /* Ensure steps appear above the progress line */
+}
+
+.step-number.active {
+  background-color: #00d1b2;
+  color: white;
+}
+
+.progress-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  height: 4px;
+  background-color: #ddd;
+  z-index: 0; /* Place behind steps */
+}
+
+.progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #00d1b2;
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .step-number {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .progress-line {
+    top: 20px;
+  }
+}
+
+/* Hide the actual file input elements */
+.uploadImageForm {
+  opacity: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+/* Style the upload icons */
+.uploadImageContainer {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.uploadItem {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center the icon and label horizontally */
+}
+
+.uploadIcon {
+  cursor: pointer;
+  font-size: 40px;
+  color: #007bff;
+  text-align: center;
+}
+
+.uploadIcon:hover {
+  color: #0056b3;
+}
+.uploadLabel {
+  text-align: center; /* Center the text below the icon */
+  font-size: 14px; /* Adjust font size as needed */
+  color: #333; /* Adjust color as needed */
+  margin-top: 5px; /* Add some spacing between icon and label */
+}
+.example-text {
+  font-style: italic; /* Makes the text italic */
+  font-size: 14px; /* Adjust font size as needed */
+  color: #888; /* Adjust color as needed */
+}
