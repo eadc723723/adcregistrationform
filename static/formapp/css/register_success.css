@@ -1,19 +1,54 @@
+/* General Page Styling */
+.adc-logo {
+  display: block; /* Ensures the image behaves as a block element */
+  margin: 0px auto; /* Centers the image horizontally */
+  max-width: 150px; /* Adjust width */
+  height: auto; /* Maintain aspect ratio */
+}
 .container {
-  padding: 5px;
+  max-width: 900px;
+  margin: auto;
+  margin: 20px auto; /* Centers the container horizontally */
+  padding: 0px;
+  font-family: Arial, sans-serif;
 }
 
-.student-details {
-  margin-bottom: 20px;
+h1,
+h2,
+h3 {
+  text-align: center;
+  color: #333;
 }
 
-.id-photos {
+/* Student Info Section */
+.student-info {
+  background: #f8f8f8;
+  padding: 15px;
+  border-radius: 8px;
   margin-bottom: 20px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  margin: auto;
+}
+
+.student-info p {
+  font-size: 14px;
+  line-height: 1.6;
+  border-bottom: 1px solid #ddd;
+  padding: 8px 0;
+}
+
+/* Student Photos Section */
+.student-photos {
+  text-align: center;
+  margin-top: 30px;
 }
 
 .image-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive grid */
-  gap: 10px; /* Spacing between images */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  justify-content: center;
+  padding: 10px;
 }
 
 .image-item {
@@ -30,62 +65,176 @@
 
 /* Watermark overlay */
 .image-item::after {
-  content: "ADC USE ONLY"; /* Change text if needed */
+  content: "ADC USE ONLY";
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  background: rgba(0, 0, 0, 0.5);
   color: white;
-  font-size: 22px;
+  font-size: 16px;
   font-weight: bold;
-  padding: 16px 24px;
+  padding: 12px 18px;
   border-radius: 10px;
-  pointer-events: none; /* Prevent user interaction */
+  pointer-events: none;
   opacity: 0.8;
   white-space: nowrap;
 }
-/* Watermark for larger screens */
-@media (min-width: 768px) {
-  .image-item::after {
-    font-size: 16px;
-    padding: 8px 12px;
-  }
-}
 
-/* Optional: Centered watermark */
-.image-item.watermark::after {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0.7;
-}
-
-/* Mobile Styles */
-@media (max-width: 768px) {
-  .image-grid {
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  }
-}
-
-/* Style for smaller screens */
-@media (max-width: 500px) {
-  .image-grid {
-    grid-template-columns: 1fr; /* Single column */
-  }
-}
-
-.success-message {
+/* Buttons */
+.button-container {
+  text-align: center;
   margin-top: 20px;
-  color: green; /* Set the text color to green */
-  text-align: center; /* Center the text */
-  font-size: 1.2rem; /* Set the font size */
 }
 
-.success-message i {
-  /* Style the icon */
-  margin-right: 10px; /* Add spacing between the icon and text */
-  font-size: 32px; /* Adjust icon size as needed */
-  text-align: center; /* Center the text */
-  color: green;
+button {
+  padding: 10px 15px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.copy-btn {
+  padding: 5px 10px;
+  font-size: 12px; /* Increased size for better alignment */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-left: 10px; /* Spacing from text */
+  border: 2px solid #28a745; /* Green border */
+  background-color: #28a745; /* Green background */
+  color: white; /* White text */
+  flex-shrink: 0;
+}
+
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.student-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.student-table tr:nth-child(even) {
+  background-color: #f9f9f9; /* Light gray for alternating rows */
+}
+
+.student-table tr:nth-child(odd) {
+  background-color: #ffffff; /* White for alternating rows */
+}
+
+.student-table td:first-child {
+  width: 30%; /* Shrink first column */
+  font-weight: bold;
+  text-align: left;
+}
+
+.student-table td:last-child {
+  width: 70%; /* Expand second column */
+}
+
+.toast-message {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+  z-index: 1000;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.section {
+  display: block; /* Ensures it takes up space */
+  margin: 30px 0; /* Adds vertical spacing (top & bottom) */
+  padding: 40px; /* Adds internal spacing */
+}
+
+/* Print Styling */
+@media print {
+  /* Hide everything by default */
+  body * {
+    visibility: hidden;
+  }
+
+  .copy-btn {
+    display: none !important;
+  }
+
+  /* Make sure the container and its content are visible */
+  .container,
+  .container * {
+    visibility: visible;
+  }
+
+  /* Hide buttons */
+  .button-container .button {
+    display: none;
+  }
+
+  .student-info {
+    box-shadow: none;
+  }
+
+  /* PRINT IC ONLY MODE */
+  body.print-ic-only {
+    overflow: hidden; /* Prevent overflow */
+    display: flex; /* Use flexbox for centering */
+  }
+
+  body.print-ic-only .details-container {
+    display: none;
+  }
+
+  body.print-ic-only .student-photos {
+    display: block;
+    width: 100%;
+    justify-content: center; /* Center horizontally */
+  }
+
+  body.print-ic-only .image-grid {
+    display: flex; /* Use flexbox for stacking */
+    flex-direction: column; /* Stack images vertically */
+    align-items: center; /* Center vertically */
+    width: 70%;
+    height: 70%; /* Use full height of the A4 page */
+    margin: 0 auto;
+    padding: 0; /* Remove padding */
+  }
+
+  body.print-ic-only .image-grid img {
+    width: 100%; /* Make images responsive */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 15px; /* Space between images */
+  }
+
+  body.print-ic-only .image-grid img:last-child {
+    margin-bottom: 0; /* Remove margin for the last image */
+  }
+
+  body.print-ic-only .image-item img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* Ensure only images print */
+  body.print-ic-only .student-photos,
+  body.print-ic-only .student-photos * {
+    visibility: visible;
+  }
 }

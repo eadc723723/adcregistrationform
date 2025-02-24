@@ -111,15 +111,19 @@
     }, 100);
   }
   function copyToClipboard(value) {
+    // Handle multi-line text by preserving line breaks
+    const textToCopy = value.replace(/<br\s*\/?>/gi, '\n').replace(/\n+/g, '\n').trim();
     navigator.clipboard
-      .writeText(value)
+      .writeText(textToCopy)
       .then(() => {
-        showToast("Copied: " + value);
+        showToast("Copied to clipboard");
       })
       .catch((err) => {
         console.error("Failed to copy: ", err);
+        showToast("Failed to copy text");
       });
   }
+
 
   function showToast(message) {
     let toast = document.createElement("div");
