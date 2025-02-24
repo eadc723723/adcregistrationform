@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import Student, Class
+from .serializers import StudentSerializer, ClassSerializer
+
 from django.views.decorators.http import require_GET
 from .forms import Step1Form, Step2Form, Step3Form, IdCardUploadForm
 from .models import Student, ID_photo, RegistrationForms, Class, Agent, Terms
@@ -183,6 +188,19 @@ def dashboard(request):
 def student_details(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     return render(request, 'student_details.html', {'student': student})
+
+class StudentList(APIView):
+    def get(self, request):
+        students = Student.objects.all()
+        serializer = StudentSerializer(students, many=True)
+        return Response(serializer.data)
+
+class ClassList(APIView):
+    def get(self, request):
+        classes = Class.objects.all()
+        serializer = ClassSerializer(classes, many=True)
+        return Response(serializer.data)
+
 
 def validate_id_no(request):
     id_no = request.GET.get('id_no', None)

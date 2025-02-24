@@ -14,8 +14,9 @@ class RegistrationFormsAdmin(admin.ModelAdmin):
 # Register the Student model
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'id', 'email', 'registration_date')
-    search_fields = ('name', 'id', 'email')
+    list_display = ('name', 'id_no', 'email', 'registration_date')
+    search_fields = ('name', 'id_no', 'email')
+
     list_filter = ('gender', 'registration_date')
 
 # Register the Class model
@@ -31,8 +32,13 @@ class ClassAdmin(admin.ModelAdmin):
 # Register the ID_photo model
 @admin.register(ID_photo)
 class ID_photoAdmin(admin.ModelAdmin):
-    list_display = ('student', 'image')
-    search_fields = ('student__name',)
+    list_display = ('student_id_no', 'image')
+    search_fields = ('student__name', 'student__id_no')
+    
+    def student_id_no(self, obj):
+        return obj.student.id_no
+    student_id_no.short_description = 'Student ID No'
+
 
 # Register the Agent model
 @admin.register(Agent)
