@@ -4,6 +4,10 @@ from django.utils import timezone
 from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
+import os
+
 
 class RegistrationForms(models.Model):
     name = models.CharField(max_length=255)
@@ -16,6 +20,7 @@ class RegistrationForms(models.Model):
 class Student(models.Model):
     name = models.CharField(max_length=255)
     id_no = models.CharField(max_length=20, unique=True)
+
     address = models.TextField()
     gender = models.CharField(
         max_length=10, choices=[("male", "Male"), ("female", "Female")]
@@ -35,8 +40,20 @@ class Student(models.Model):
     )
     class_id = models.ManyToManyField('Class', blank=True)
     registration_date = models.DateTimeField(default=timezone.now) 
-    id_photos = models.ManyToManyField('Photo')
+
+    def delete(self, *args, **kwargs):
+        # Delete associated media files before deleting the student
+        for photo in self.id_photos.all():
+            if photo.image and hasattr(photo.image, 'path'):  # Ensure path exists
+                image_path = photo.image.path
+                if os.path.isfile(image_path):
+                    os.remove(image_path)  # Delete the image file
+            photo.delete()  # Delete the Photo object itself
+        
+        super().delete(*args, **kwargs)
     
+    def __str__(self):
+        return self.name
 
 class Class(models.Model):
     class_type = models.CharField(max_length=100)
@@ -47,7 +64,7 @@ class Class(models.Model):
     
 
 class ID_photo(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="id_photo_set")
     image = models.ImageField(upload_to='id_photos/')
 
     def save(self, *args, **kwargs):
@@ -85,6 +102,17 @@ class ID_photo(models.Model):
         self.image = img_file
 
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # Delete the image file from storage before deleting the object
+        if self.image and hasattr(self.image, 'path'):
+            image_path = self.image.path
+            if os.path.isfile(image_path):
+                os.remove(image_path)
+        super().delete(*args, **kwargs)
+
+    def __str__(self):
+        return f"Photo for {self.student.name}"
 
 class Agent(models.Model):
     agent_code = models.CharField(max_length=20, unique=True)

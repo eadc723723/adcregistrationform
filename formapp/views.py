@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
+from datetime import datetime
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Student, Class
@@ -208,6 +211,61 @@ def validate_id_no(request):
         'exists': Student.objects.filter(id_no=id_no).exists()
     }
     return JsonResponse(data)
+
+def preview_students(request):
+    context = {'students': [], 'start_date': '', 'end_date': ''}
+
+    if request.method == 'POST':
+        try:
+            start_date = request.POST.get('start_date', '')
+            end_date = request.POST.get('end_date', '')
+
+            if start_date and end_date:
+                start_date_dt = datetime.strptime(start_date, '%Y-%m-%d')
+                end_date_dt = datetime.strptime(end_date, '%Y-%m-%d').replace(hour=23, minute=59, second=59)
+
+                students = Student.objects.filter(
+                    registration_date__range=(start_date_dt, end_date_dt)
+                )
+
+                context.update({
+                    'students': students,
+                    'message': 'Students fetched successfully',
+                    'start_date': start_date,  # Retain the start date
+                    'end_date': end_date,  # Retain the end date
+                })
+            else:
+                context['error'] = 'Please provide both start and end dates.'
+        except Exception as e:
+            context['error'] = f'Error fetching students: {str(e)}'
+
+    return render(request, 'delete_students.html', context)
+
+def delete_students_by_date(request):
+    if request.method == 'POST':
+        try:
+            start_date = request.POST.get('start_date')
+            end_date = request.POST.get('end_date')
+
+            if start_date and end_date:
+                start_date = datetime.strptime(start_date, '%Y-%m-%d')
+                end_date = datetime.strptime(end_date, '%Y-%m-%d').replace(hour=23, minute=59, second=59)
+
+                students = Student.objects.filter(
+                    registration_date__range=(start_date, end_date)
+                )
+                
+                deleted_count, _ = students.delete()
+                return redirect('delete_students')  # Redirect to prevent form resubmission
+            else:
+                context = {'error': 'Please provide both start and end dates.'}
+        except Exception as e:
+            context = {'error': f'Error deleting students: {str(e)}'}
+        
+        return render(request, 'delete_students.html', context)
+
+    return render(request, 'delete_students.html')
+
 
 @require_GET
 def filter_students(request):
