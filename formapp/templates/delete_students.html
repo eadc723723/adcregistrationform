@@ -4,6 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
     <title>Manage Students</title>
     <style>
       body {
@@ -80,6 +81,21 @@
       <div class="message error">{{ error }}</div>
       {% endif %}
 
+      <!-- Form for Single Student Deletion -->
+      <form method="POST" class="delete-form" id="singleDeleteForm">
+        {% csrf_token %}
+        <label for="id_no">Student ID:</label>
+        <input type="text" id="id_no" name="id_no" placeholder="Enter student ID" required />
+        <button type="button" onclick="previewStudent()" id="previewBtn">Preview</button>
+        <button type="submit" formaction="{% url 'delete_student_by_id' %}" id="deleteBtn" style="display: none">Delete Student</button>
+      </form>
+
+      <!-- Preview Section -->
+      <div class="preview-section box" id="previewSection">
+        <div class="preview-loading" id="loading">Loading preview...</div>
+        <div id="studentPreview"></div>
+      </div>
+
       <!-- Form to Preview and Delete Students -->
       <form method="POST">
         {% csrf_token %}
@@ -118,5 +134,57 @@
       <p>No students found for the selected date range.</p>
       {% endif %}
     </div>
+
+    <script>
+      function previewStudent() {
+        const id_no = document.getElementById("id_no").value;
+        const previewSection = document.getElementById("previewSection");
+        const loading = document.getElementById("loading");
+        const previewContent = document.getElementById("studentPreview");
+
+        if (!id_no) {
+          alert("Please enter a student ID");
+          return;
+        }
+
+        // Show loading
+        loading.style.display = "block";
+        previewContent.innerHTML = "";
+
+        // Make an AJAX call to preview the student
+        fetch("{% url 'preview_student_by_id' %}?id_no=" + encodeURIComponent(id_no))
+          .then((response) => response.json())
+          .then((data) => {
+            loading.style.display = "none";
+
+            if (data.error) {
+              alert(data.error);
+              return;
+            }
+
+            if (data.student) {
+              previewSection.classList.add("active");
+              document.getElementById("deleteBtn").style.display = "inline-block";
+
+              // Populate preview content
+              previewContent.innerHTML = `
+                <h3>Student Preview</h3>
+                <p><strong>ID:</strong> ${data.student.id}</p>
+                <p><strong>Name:</strong> ${data.student.name}</p>
+                <p><strong>Registration Date:</strong> ${data.student.registration_date}</p>
+              `;
+            } else {
+              previewSection.classList.remove("active");
+              document.getElementById("deleteBtn").style.display = "none";
+              alert("Student not found");
+            }
+          })
+          .catch((error) => {
+            loading.style.display = "none";
+            console.error("Error:", error);
+            alert("An error occurred while fetching the student preview");
+          });
+      }
+    </script>
   </body>
 </html>

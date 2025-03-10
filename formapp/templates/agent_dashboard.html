@@ -1,0 +1,135 @@
+{% extends "base.html" %} {% block title %}Agent Dashboard{% endblock %} {% block content %}
+<style>
+  .user-info {
+    display: flex;
+    justify-content: space-between; /* Pushes text left & button right */
+    align-items: center; /* Align items vertically */
+    width: 100%; /* Ensure it spans the container */
+  }
+</style>
+<div class="container section">
+  <h2 class="title is-3">Agent Dashboard</h2>
+  <p class="subtitle is-6 user-info">
+    <span>Logged in as: <strong>{{ request.user.username }}</strong></span>
+    <button class="button is-small is-warning" id="changePasswordBtn">Change Password</button>
+  </p>
+
+  <!-- Search Form -->
+  <form id="searchForm" method="get" action="{% url 'agent_dashboard' %}">
+    <div class="field">
+      <label class="label">Student ID</label>
+      <div class="control">
+        <input class="input" type="text" name="student_id" placeholder="Enter Student ID" />
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Student Name</label>
+      <div class="control">
+        <input class="input" type="text" name="student_name" placeholder="Enter Student Name" />
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Date From</label>
+      <div class="control">
+        <input class="input" type="date" name="date_from" />
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Date To</label>
+      <div class="control">
+        <input class="input" type="date" name="date_to" />
+      </div>
+    </div>
+    <button type="submit" class="button is-primary is-fullwidth">Search</button>
+  </form>
+
+  <!-- Show results in card format -->
+  {% if search_performed %} {% if students %}
+  <p class="subtitle is-5" style="margin-top: 10px"><strong>Total Results:</strong> {{ students|length }}</p>
+  <div class="columns is-multiline" style="margin-top: 20px">
+    {% for student in students %}
+    <div class="column is-half">
+      <div class="card">
+        <div class="card-content">
+          <p class="title is-5">{{ student.name }}</p>
+          <p><strong>IC/No:</strong> {{ student.id_no }}</p>
+          <p><strong>H/p:</strong> {{ student.phone_numbers }}</p>
+          <p><strong>Registration Date:</strong> {{ student.registration_date|date:"d/m/Y" }}</p>
+          <p><strong>Class:</strong> {{ student.class_id.first.class_type }}</p>
+          <div class="buttons" style="margin-top: 10px">
+            <a href="{% url 'agent_student_details' student.id %}" class="button is-link is-small">View Details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p>No students found. Please try again.</p>
+  {% endif %} {% endif %}
+
+  <!-- Logout Button -->
+  <form action="{% url 'logout' %}" method="post" style="margin-top: 20px">
+    {% csrf_token %}
+    <button type="submit" class="button is-danger is-fullwidth">Logout</button>
+  </form>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal" id="changePasswordModal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Change Password</p>
+      <button class="delete" aria-label="close" id="closeModal"></button>
+    </header>
+    <section class="modal-card-body">
+      <form method="post" action="{% url 'change_password' %}">
+        {% csrf_token %}
+        <div class="field">
+          <label class="label">Old Password</label>
+          <div class="control">
+            <input class="input" type="password" name="old_password" required />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">New Password</label>
+          <div class="control">
+            <input class="input" type="password" name="new_password1" required />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Confirm New Password</label>
+          <div class="control">
+            <input class="input" type="password" name="new_password2" required />
+          </div>
+        </div>
+        <button type="submit" class="button is-primary is-fullwidth">Change Password</button>
+      </form>
+    </section>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("changePasswordModal");
+    const changePasswordBtn = document.getElementById("changePasswordBtn");
+    const closeModal = document.getElementById("closeModal");
+
+    changePasswordBtn.addEventListener("click", function () {
+      modal.classList.add("is-active");
+    });
+
+    closeModal.addEventListener("click", function () {
+      modal.classList.remove("is-active");
+    });
+
+    document.addEventListener("click", function (event) {
+      if (event.target.classList.contains("modal-background")) {
+        modal.classList.remove("is-active");
+      }
+    });
+  });
+</script>
+
+{% endblock %}

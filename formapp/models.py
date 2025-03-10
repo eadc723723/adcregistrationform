@@ -43,7 +43,7 @@ class Student(models.Model):
 
     def delete(self, *args, **kwargs):
         # Delete associated media files before deleting the student
-        for photo in self.id_photos.all():
+        for photo in self.id_photo_set.all():
             if photo.image and hasattr(photo.image, 'path'):  # Ensure path exists
                 image_path = photo.image.path
                 if os.path.isfile(image_path):

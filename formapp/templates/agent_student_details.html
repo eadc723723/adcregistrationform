@@ -1,0 +1,121 @@
+{% extends "base.html" %}{%load static%} {% block title %}Agent Student Details{% endblock %} {% block content %}
+<link rel="stylesheet" href="{% static 'formapp/css/agent_student_details.css' %}" />
+
+<div class="details-container">
+  <img src="{% static 'formapp/images/icon-192x192.png' %}" alt="adclogo" class="adc-logo" />
+
+  <!-- Student Information Form -->
+  <div class="student-info">
+    <h2>Student Registration Form</h2>
+    <form method="post" action="{% url 'agent_student_details' student.id %}">
+      {% csrf_token %}
+      <table class="student-table">
+        <tbody>
+          <tr>
+            <td><strong>Registration Form:</strong></td>
+            <td><strong>{{ student.registration_form.name }}</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Class:</strong></td>
+            <td>{% for class in student.class_id.all %} {{ class.class_type }}{% if not forloop.last %}, {% endif %} {% empty %} No classes assigned. {% endfor %}</td>
+          </tr>
+          <tr>
+            <td><strong>IC NO:</strong></td>
+            <td>
+              <input type="text" name="id_no" value="{{ student.id_no }}" class="input" />
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Name:</strong></td>
+            <td>
+              <input type="text" name="name" value="{{ student.name }}" class="input" />
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Gender:</strong></td>
+            <td>
+              <input type="text" name="gender" value="{{ student.gender }}" class="input" />
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Phone:</strong></td>
+            <td>
+              <input type="text" name="phone_numbers" value="{{ student.phone_numbers }}" class="input" />
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Agent:</strong></td>
+            <td>{{ student.agent.agent_code }} - {{ student.agent.agent_name }}</td>
+          </tr>
+          <tr>
+            <td><strong>Address:</strong></td>
+            <td>
+              <input type="text" name="address" value="{{ student.address }}" class="input" />
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Email:</strong></td>
+            <td>
+              <input type="email" name="email" value="{{ student.email }}" class="input" />
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Emergency Contact:</strong></td>
+            <td>
+              <input type="text" name="contact_no_emergency" value="{{ student.contact_no_emergency }}" class="input" />
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Emergency Contact Relationship:</strong></td>
+            <td>
+              <input type="text" name="emergency_contact_relationship" value="{{ student.emergency_contact_relationship }}" class="input" />
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Registration Date:</strong></td>
+            <td>{{ student.registration_date|date:"d/m/Y" }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="submit" class="button is-primary">Update</button>
+    </form>
+  </div>
+
+  <span class="section"></span>
+</div>
+
+<!-- Separate Image Section (Outside Container) -->
+<div class="student-photos">
+  <h3>Student Attachment:</h3>
+  <div class="image-grid">
+    {% for photo in student.id_photo_set.all %}
+    <div class="image-item">
+      <img src="{{ photo.image.url }}" alt="Student ID Photo" />
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Buttons -->
+<div class="button-container">
+  <button onclick="goBackToDashboard()" class="back-button button">Back</button>
+</div>
+
+<script>
+  function goBackToDashboard() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const studentId = urlParams.get("student_id");
+    const studentName = urlParams.get("student_name");
+    const dateFrom = urlParams.get("date_from");
+    const dateTo = urlParams.get("date_to");
+    const queryParams = new URLSearchParams({
+      student_id: studentId,
+      student_name: studentName,
+      date_from: dateFrom,
+      date_to: dateTo,
+    }).toString();
+    window.location.href = `{% url 'agent_dashboard' %}?${queryParams}`;
+  }
+</script>
+
+{% endblock %}
